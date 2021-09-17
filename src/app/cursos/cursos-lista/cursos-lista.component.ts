@@ -38,6 +38,12 @@ export class CursosListaComponent implements OnInit {
           return of()
         })
       )
+
+    // this.cursoService.listar().subscribe(
+    //   cursos => console.log(cursos),
+    //   error => console.error(error),
+    //   () => console.log('Observable completo')
+    // )
   }
 
 }
