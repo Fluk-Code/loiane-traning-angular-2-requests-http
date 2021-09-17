@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 
+import { Observable, of, Subject } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+
 import { CursosService } from '../cursos.service';
 import { Cursos } from '../curso';
-import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-cursos-lista',
@@ -14,6 +16,7 @@ export class CursosListaComponent implements OnInit {
 
   //cursos: Cursos
   cursos$: Observable<Cursos>
+  error$ = new Subject<boolean>()
 
   constructor(
     private cursoService: CursosService
@@ -24,6 +27,13 @@ export class CursosListaComponent implements OnInit {
     //  .subscribe(response => this.cursos = response)
 
     this.cursos$ = this.cursoService.listar()
+      .pipe(
+        catchError( error => {
+          console.log(error)
+          this.error$.next(true)
+          return of()
+        })
+      )
   }
 
 }
