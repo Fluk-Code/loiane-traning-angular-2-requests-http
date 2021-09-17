@@ -26,6 +26,10 @@ export class CursosListaComponent implements OnInit {
     // this.cursoService.listar()
     //  .subscribe(response => this.cursos = response)
 
+    this.onRefresh()
+  }
+
+  onRefresh(): void {
     this.cursos$ = this.cursoService.listar()
       .pipe(
         catchError( error => {
