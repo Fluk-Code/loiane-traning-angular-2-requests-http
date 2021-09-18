@@ -39,30 +39,31 @@ export class CursosFormComponent implements OnInit {
     //   }
     // )
 
-    this.activatedRoute.params
-      .pipe(
-        map((params: any) => params['id']),
-        switchMap(id => this.cursosService.litarPorID(id)) 
-        // switchMap -> Se importa somente com a ultima req
-        // concatMap -> Ordem das reqs importa
-        // mergeMap -> Ordem das reqs nao importa
-        // exhaustMap -> casos de login (aguarda a resp da req para execuar a proxima req)
-      )
-      .subscribe((curso: Curso) => this.updateForm(curso))
+    // this.activatedRoute.params
+    //   .pipe(
+    //     map((params: any) => params['id']),
+    //     switchMap(id => this.cursosService.listarPorID(id)) 
+    //     // switchMap -> Se importa somente com a ultima req
+    //     // concatMap -> Ordem das reqs importa
+    //     // mergeMap -> Ordem das reqs nao importa
+    //     // exhaustMap -> casos de login (aguarda a resp da req para execuar a proxima req)
+    //   )
+    //   .subscribe((curso: Curso) => this.updateForm(curso))
 
+    const curso = this.activatedRoute.snapshot.data['curso']
 
     this.form = this.formBuilder.group({
-      id: [null],
-      nome: [null, [Validators.required, Validators.minLength(3), Validators.maxLength(250)]]
+      id: [curso.id],
+      nome: [curso.nome, [Validators.required, Validators.minLength(3), Validators.maxLength(250)]]
     })
   }
 
-  updateForm(curso): void {
-    this.form.patchValue({
-      id: curso.id,
-      nome: curso.nome
-    })
-  }
+  // updateForm(curso): void {
+  //   this.form.patchValue({
+  //     id: curso.id,
+  //     nome: curso.nome
+  //   })
+  // }
 
   hasError(field: string) {
     return this.form.get(field).errors
@@ -74,8 +75,8 @@ export class CursosFormComponent implements OnInit {
     const curso = this.form.value
     if (this.form.valid) {
       this.cursosService.criar(curso).subscribe(
-        success => {
-          this.alertModalService.showAlertSuccess(`Curso ${success.nome} criado com sucesso`)
+        (curso: Curso) => {
+          this.alertModalService.showAlertSuccess(`Curso ${curso.nome} criado com sucesso`)
           this.location.back()
         },
         error => this.alertModalService.showAlertDanger('Não conseguimos criar esse curso, tente novamente !'),

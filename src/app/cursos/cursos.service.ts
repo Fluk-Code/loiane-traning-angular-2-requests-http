@@ -25,8 +25,8 @@ export class CursosService {
       )
   }
 
-  litarPorID(id: number) {
-    return this.http.get(`${this.API}/${id}`)
+  listarPorID(id: number) {
+    return this.http.get<Curso>(`${this.API}/${id}`)
       .pipe(
         take(1)
       )
