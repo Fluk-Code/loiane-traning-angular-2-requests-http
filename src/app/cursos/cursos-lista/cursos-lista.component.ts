@@ -1,8 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { Observable, of, Subject } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { EMPTY, Observable, of, Subject } from 'rxjs';
+import { catchError, switchMap, take } from 'rxjs/operators';
 
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 
@@ -54,7 +54,7 @@ export class CursosListaComponent implements OnInit {
         catchError( error => {
           //this.error$.next(true)
           this.handleError()
-          return of()
+          return EMPTY
         })
       )
 
@@ -70,8 +70,20 @@ export class CursosListaComponent implements OnInit {
   }
 
   onDelete(curso: Curso) {
-    this.cursoSelecionado = curso
-    this.deleteModalRef = this.modalService.show(this.deleteModal, { class: 'modal-sm' })
+    //this.cursoSelecionado = curso
+    //this.deleteModalRef = this.modalService.show(this.deleteModal, { class: 'modal-sm' })
+    
+    const result$ = this.alertService.showConfirm('Confirmacao', 'Tem certeza que deseja remover esse curso ?')
+    result$.asObservable()
+      .pipe(
+        take(1),
+        switchMap( result => result ? this.cursoService.remover(curso.id): EMPTY)
+      )
+      .subscribe(
+        success => this.onRefresh(),
+        error => this.alertService.showAlertDanger('Não foi possivel remover o curso, tente novamente !'),
+        () => console.log('Remoção do curso completa')
+      )
   }
 
   onConfirmDelete() {
@@ -86,7 +98,7 @@ export class CursosListaComponent implements OnInit {
   }
 
   onDeclineDelete() {
-    this,this.deleteModalRef.hide();
+    this.deleteModalRef.hide();
   }
 
   handleError() {
