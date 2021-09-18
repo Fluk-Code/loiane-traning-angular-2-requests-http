@@ -73,15 +73,47 @@ export class CursosFormComponent implements OnInit {
     this.submitted = true
 
     const curso = this.form.value
+    // if (this.form.valid) {
+    //   if (this.form.value.id){ 
+    //     this.cursosService.atualizar(this.form.value)
+    //       .subscribe(
+    //         succes => this.alertModalService.showAlertSuccess('Cruso alterado com sucesso'),
+    //         error => this.alertModalService.showAlertDanger('Não foi possivel realizar a alteração, tente novamente !'),
+    //         () => console.log('Update Completo')
+    //       )
+    //   }
+    //   else {
+    //     this.cursosService.criar(curso).subscribe(
+    //       (curso: Curso) => {
+    //         this.alertModalService.showAlertSuccess(`Curso ${curso.nome} criado com sucesso`)
+    //         this.location.back()
+    //       },
+    //       error => this.alertModalService.showAlertDanger('Não conseguimos criar esse curso, tente novamente !'),
+    //       () => console.log('request completo')
+    //     )
+    //   }
+    // }
+
     if (this.form.valid) {
-      this.cursosService.criar(curso).subscribe(
-        (curso: Curso) => {
-          this.alertModalService.showAlertSuccess(`Curso ${curso.nome} criado com sucesso`)
-          this.location.back()
-        },
-        error => this.alertModalService.showAlertDanger('Não conseguimos criar esse curso, tente novamente !'),
-        () => console.log('request completo')
-      )
+
+      const curso: Curso = this.form.value
+
+      let msgSuccess = `Curso ${curso.nome} foi criado com sucesso.`
+      let msgError = `Não foi possivel criar o curso ${curso.nome}, tente novamente !`
+      if (curso.id){
+        msgSuccess = `Curso ${curso.nome} foi atualizado com sucesso.`
+        msgError = `Não foi possivel atualizar o curso ${curso.nome}, tente novamente !`
+      }
+
+      this.cursosService.salvar(curso)
+        .subscribe(
+          sucesso => {
+            this.alertModalService.showAlertSuccess(msgSuccess)
+            this.location.back()
+          },
+          error => this.alertModalService.showAlertDanger(msgError),
+          () => console.log('Req salvar completa')
+        )
     }
   }
 
