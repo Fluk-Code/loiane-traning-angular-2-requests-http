@@ -52,4 +52,11 @@ export class CursosService {
     }
     return this.criar(curso)
   }
+
+  remover(id: number) {
+    return this.http.delete(`${this.API}/${id}`)
+    .pipe(
+      take(1)
+    )
+  }
 }

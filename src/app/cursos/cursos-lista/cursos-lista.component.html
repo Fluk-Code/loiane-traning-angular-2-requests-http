@@ -26,7 +26,7 @@
             <span class="float-end">
               <button class="btn btn-outline-warning mb-1 btn-sm" (click)="onEdit(curso.id)" > Atualizar </button>
 
-              <button class="btn btn-outline-danger mb-1 btn-sm"> Remover </button>
+              <button class="btn btn-outline-danger mb-1 btn-sm" (click)="onDelete(curso)"> Remover </button>
             </span>
           </td>
         </tr>
@@ -43,5 +43,13 @@
 
     </ng-template-->
   </div> 
+
+  <ng-template #deleteModal>
+    <div class="modal-body text-center">
+      <p> Deseja realmente remover o curos ?</p>
+      <button type="button" class="btn btn-default" (click)="onConfirmDelete()" >Sim</button>
+      <button type="button" class="btn btn-primary" (click)="onDeclineDelete()" >Não</button>
+    </div>
+  </ng-template>
 
 </div>

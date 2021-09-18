@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { Observable, of, Subject } from 'rxjs';
@@ -8,7 +8,7 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 
 import { AlertModalService } from 'src/app/shared/services/alert-modal.service';
 import { CursosService } from '../cursos.service';
-import { Cursos } from '../curso';
+import { Curso, Cursos } from '../curso';
 
 
 // import { AlertModalComponent } from 'src/app/shared/alert-modal/alert-modal.component';
@@ -21,18 +21,24 @@ import { Cursos } from '../curso';
 })
 export class CursosListaComponent implements OnInit {
 
-  bsModalRef: BsModalRef
+  // bsModalRef: BsModalRef
+  deleteModalRef: BsModalRef
+
+  @ViewChild('deleteModal')
+  deleteModal
 
   //cursos: Cursos
   cursos$: Observable<Cursos>
   error$ = new Subject<boolean>()
 
+  private cursoSelecionado: Curso;
+
   constructor(
     private cursoService: CursosService,
     private alertService: AlertModalService,
     private router: Router,
-    private activatedRoute: ActivatedRoute
-    // private modalService: BsModalService
+    private activatedRoute: ActivatedRoute,
+    private modalService: BsModalService
   ) { }
 
   ngOnInit(): void {
@@ -61,6 +67,26 @@ export class CursosListaComponent implements OnInit {
 
   onEdit(id: number) {
     this.router.navigate(['editar', id], { relativeTo: this.activatedRoute })
+  }
+
+  onDelete(curso: Curso) {
+    this.cursoSelecionado = curso
+    this.deleteModalRef = this.modalService.show(this.deleteModal, { class: 'modal-sm' })
+  }
+
+  onConfirmDelete() {
+    this.cursoService.remover(this.cursoSelecionado.id)
+      .subscribe(
+        success => this.onRefresh(),
+        error => this.alertService.showAlertDanger('Não foi possivel remover o curso, tente novamente !'),
+        () => console.log('Remoção do curso completa')
+      )
+    
+    this.onDeclineDelete()
+  }
+
+  onDeclineDelete() {
+    this,this.deleteModalRef.hide();
   }
 
   handleError() {
