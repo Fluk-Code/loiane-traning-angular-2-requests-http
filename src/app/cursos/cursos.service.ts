@@ -25,6 +25,13 @@ export class CursosService {
       )
   }
 
+  litarPorID(id: number) {
+    return this.http.get(`${this.API}/${id}`)
+      .pipe(
+        take(1)
+      )
+  }
+
   criar(curso: Curso) {
     return this.http.post(this.API, curso)
       .pipe(
