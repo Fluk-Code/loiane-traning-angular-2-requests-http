@@ -23,6 +23,14 @@ app.post('/upload', multipartyMiddleware, (req, res) => {
   res.status(200).json({ message: files })
 })
 
+app.get('/downloadPdf', (req, res) => {
+  res.download('./uploads/report.pdf')
+})
+
+app.get('/downloadExcel', (req, res) => {
+  res.download('./uploads/report.xlsx')  
+})
+
 app.use((err, req, res, next) => res.json({ error: err.message }))
 
 

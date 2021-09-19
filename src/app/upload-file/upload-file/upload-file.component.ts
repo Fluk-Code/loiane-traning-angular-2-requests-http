@@ -7,7 +7,8 @@ import { UploadFileService } from '../upload-file.service';
 @Component({
   selector: 'app-upload-file',
   templateUrl: './upload-file.component.html',
-  styleUrls: ['./upload-file.component.scss']
+  styleUrls: ['./upload-file.component.scss'],
+  preserveWhitespaces: true
 })
 export class UploadFileComponent implements OnInit {
 
@@ -70,6 +71,16 @@ export class UploadFileComponent implements OnInit {
             error => console.error(error)
           )
     }
+  }
+
+  onDownloadExcel() { 
+    this.uploadFileService.download(`${this.API}downloadExcel`)
+      .subscribe( (res: Blob) => this.uploadFileService.handleFile(res, 'report.xlsx'))
+  }
+
+  onDownloadPdf() { 
+    this.uploadFileService.download(`${this.API}downloadPdf`)
+      .subscribe( (res: Blob) => this.uploadFileService.handleFile(res, 'report.pdf'))
   }
 
 }
