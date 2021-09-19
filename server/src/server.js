@@ -10,6 +10,7 @@ const corsOptions = {
   origin: '*',
   optionsSucessStatus: 200
 }
+app.use(cors(corsOptions))
 
 const multipartyMiddleware = multiparty({ uploadDir: './uploads' })
 app.post('/upload', multipartyMiddleware, (req, res) => {
@@ -22,6 +23,5 @@ app.post('/upload', multipartyMiddleware, (req, res) => {
 
 app.use((err, req, res, next) => res.json({ error: err.message }))
 
-app.use(cors(corsOptions))
 
 app.listen(3000, () => console.log('SERVIDOR ONLINE NA PORTA 3000'))
