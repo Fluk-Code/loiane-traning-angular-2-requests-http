@@ -19,7 +19,7 @@ export class CursoResolverGuard implements Resolve<Curso> {
   ): Observable<Curso> {
     
     if(route.params && route.params['id']) {
-      return this.cursosService.listarPorID(route.params['id'])
+      return this.cursosService.listById(route.params['id'])
     }
 
     return of ({

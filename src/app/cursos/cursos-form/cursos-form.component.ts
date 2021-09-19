@@ -105,7 +105,7 @@ export class CursosFormComponent implements OnInit {
         msgError = `Não foi possivel atualizar o curso ${curso.nome}, tente novamente !`
       }
 
-      this.cursosService.salvar(curso)
+      this.cursosService.save(curso)
         .subscribe(
           sucesso => {
             this.alertModalService.showAlertSuccess(msgSuccess)

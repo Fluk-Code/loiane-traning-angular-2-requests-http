@@ -26,11 +26,7 @@
     },
     {
       "id": 7,
-      "nome": "API RestFull com NodeJs"
-    },
-    {
-      "nome": "Angular 2",
-      "id": 8
+      "nome": "API restfull com nodejs"
     }
   ]
 }

@@ -34,7 +34,7 @@ export class CursosListaComponent implements OnInit {
   private cursoSelecionado: Curso;
 
   constructor(
-    private cursoService: CursosService,
+    private cursosService: CursosService,
     private alertService: AlertModalService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -49,7 +49,7 @@ export class CursosListaComponent implements OnInit {
   }
 
   onRefresh(): void {
-    this.cursos$ = this.cursoService.listar()
+    this.cursos$ = this.cursosService.list()
       .pipe(
         catchError( error => {
           //this.error$.next(true)
@@ -77,7 +77,7 @@ export class CursosListaComponent implements OnInit {
     result$.asObservable()
       .pipe(
         take(1),
-        switchMap( result => result ? this.cursoService.remover(curso.id): EMPTY)
+        switchMap( result => result ? this.cursosService.remove(curso.id): EMPTY)
       )
       .subscribe(
         success => this.onRefresh(),
@@ -87,7 +87,7 @@ export class CursosListaComponent implements OnInit {
   }
 
   onConfirmDelete() {
-    this.cursoService.remover(this.cursoSelecionado.id)
+    this.cursosService.remove(this.cursoSelecionado.id)
       .subscribe(
         success => this.onRefresh(),
         error => this.alertService.showAlertDanger('Não foi possivel remover o curso, tente novamente !'),
