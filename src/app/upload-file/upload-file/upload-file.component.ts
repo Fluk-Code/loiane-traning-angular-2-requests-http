@@ -36,7 +36,7 @@ export class UploadFileComponent implements OnInit {
 
   onUpload() {
     if (this.files && this.files.size > 0){
-      this.uploadFileService.upload(this.files, `${this.API}upload`)
+      this.uploadFileService.upload(this.files, `${this.API}api/upload`)
         .subscribe(
           response => console.log('upload concluido'),
           error => console.error(error)
