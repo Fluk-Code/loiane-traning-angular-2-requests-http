@@ -3,11 +3,5 @@
     <input type="file" class="form-control" id="customFile" multiple (change)="onChange($event)"/>
   </div>
 
-  <p id="arquivosSelecionados" style="margin-top: 2rem"></p>
-
-  <div style="margin-top: 2rem">
-    <button type="button" class="btn btn-primary" (click)="onUpload()" [disabled]="!files"> Upload </button>
-  </div>
-
-
+  <p id="arquivosSelecionados"></p>
 </div>
