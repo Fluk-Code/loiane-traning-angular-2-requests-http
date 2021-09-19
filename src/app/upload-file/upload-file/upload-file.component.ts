@@ -1,3 +1,4 @@
+import { HttpEvent, HttpEventType } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { UploadFileService } from '../upload-file.service';
@@ -12,10 +13,13 @@ export class UploadFileComponent implements OnInit {
   files: Set<File>
   API: string
 
+  progress: number
+
   constructor(
     private uploadFileService: UploadFileService
   ) { 
     this.API = environment.API
+    this.progress = 0
   }
 
   ngOnInit(): void {
@@ -32,13 +36,25 @@ export class UploadFileComponent implements OnInit {
     }
 
     document.getElementById('arquivosSelecionados').innerHTML = fileNames.join(', ')
+  
+    this.progress = 0
   }
 
   onUpload() {
     if (this.files && this.files.size > 0){
-      this.uploadFileService.upload(this.files, `${this.API}api/upload`)
+      this.uploadFileService.upload(this.files, `${this.API}upload`)
         .subscribe(
-          response => console.log('upload concluido'),
+          (event: HttpEvent<Object>) => {
+            if (event.type === HttpEventType.Response) {
+              console.log('upload concluido')
+            }
+            else if (event.type === HttpEventType.UploadProgress) {
+              const percentDone = Math.round((event.loaded * 100)/ event.total)
+              this.progress = percentDone
+              console.log('Progresso: ', percentDone)
+            }
+            console.log(event)
+          },
           error => console.error(error)
         )
     }

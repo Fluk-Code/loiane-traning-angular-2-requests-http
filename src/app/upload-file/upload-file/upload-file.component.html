@@ -5,6 +5,15 @@
 
   <p id="arquivosSelecionados" style="margin-top: 2rem"></p>
 
+  <div class="progress" style="margin-top: 2rem">
+    <div 
+      class="progress-bar" 
+      role="progressbar" 
+      style="width: 25%;"
+      [style.width]="progress + '%'"
+    > {{ progress }} </div>
+  </div>
+
   <div style="margin-top: 2rem">
     <button type="button" class="btn btn-primary" (click)="onUpload()" [disabled]="!files"> Upload </button>
   </div>
