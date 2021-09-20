@@ -5,7 +5,7 @@ const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    redirectTo: 'upload'
+    redirectTo: 'pesquisareativa'
   },
   {
     path: 'cursos',
@@ -16,6 +16,11 @@ const routes: Routes = [
     path: 'upload',
     loadChildren: () => import('./upload-file/upload-file.module')
       .then(module => module.UploadFileModule)
+  },
+  {
+    path: 'pesquisareativa',
+    loadChildren: () => import('./reactive-search/reactive-search.module')
+      .then(module => module.ReactiveSearchModule)
   }
 ];
 
