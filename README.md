@@ -1,4 +1,4 @@
-# Cruso Angular 2 Loiane traning
+# Curso Angular 2 Loiane traning
 - Atividades realizados no modulo HTTP
 - [Link do Curso](https://loiane.training/curso/angular)
 
