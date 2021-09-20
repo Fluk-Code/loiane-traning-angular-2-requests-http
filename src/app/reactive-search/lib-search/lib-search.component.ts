@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Params } from '@angular/router';
 import { Observable } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { debounceTime, distinct, distinctUntilChanged, filter, map, switchMap, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-lib-search',
@@ -15,7 +15,7 @@ export class LibSearchComponent implements OnInit {
   queryField: FormControl
   readonly SERCH_URL: string
   results$: Observable<any>
-  fields: Array<string>
+  FIELDS: Array<string>
   total: number
   
   constructor(
@@ -23,10 +23,28 @@ export class LibSearchComponent implements OnInit {
   ) { 
     this.queryField = new FormControl()
     this.SERCH_URL = 'https://api.cdnjs.com/libraries'
-    this.fields = ['name','filename','version']
+    this.FIELDS = ['name','filename','version']
   }
 
   ngOnInit(): void {
+
+    this.results$ = this.queryField.valueChanges
+      .pipe(
+        map(value => value.trim()),
+        filter(value => value.length > 1),
+        debounceTime(200),
+        distinctUntilChanged(),
+        tap(value => console.log(value)),
+        switchMap(value => this.http.get(this.SERCH_URL, {
+          params: {
+            search: value,
+            fields: this.FIELDS.join(',')
+          }
+        })),
+        tap((res:any) => this.total = res.total),
+        map((res: any) => res.results)
+      )
+
   }
 
   onSearch() {
@@ -34,12 +52,12 @@ export class LibSearchComponent implements OnInit {
 
     // const params = {
     //   search: value,
-    //   fields: this.fields.join(',')
+    //   fields: this.FIELDS.join(',')
     // }
 
     let params = new HttpParams()
     params = params.set('search', value)
-    params = params.append('fields', this.fields.join(','))
+    params = params.append('fields', this.FIELDS.join(','))
 
     if (value){
       this.results$ = this.http.get(this.SERCH_URL,{ params })
