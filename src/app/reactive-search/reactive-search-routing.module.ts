@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { ReactiveSearchComponent } from './reactive-search/reactive-search.component';
+import { LibSearchComponent } from './lib-search/lib-search.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: ReactiveSearchComponent
+    component: LibSearchComponent
   }
 ];
 
